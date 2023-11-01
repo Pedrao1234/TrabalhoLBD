@@ -1,4 +1,4 @@
-package dev.lbd.biblioteca.config;
+package dev.lbd.biblioteca.config.postgres;
 
 import jakarta.annotation.PostConstruct;
 //import jakarta.persistence.EntityManager;
