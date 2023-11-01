@@ -1,0 +1,22 @@
+version: "3"
+services:
+  postgres:
+    container_name: biblioteca_lbd
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=dev_user
+      - POSTGRES_PASSWORD=dev_password
+      - POSTGRES_DB=biblioteca_lbd
+    networks:
+      biblioteca_network:
+        ipv4_address: 192.168.0.10
+
+networks:
+  biblioteca_network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.0.0/24
