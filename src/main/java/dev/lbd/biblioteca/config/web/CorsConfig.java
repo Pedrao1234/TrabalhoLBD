@@ -9,7 +9,7 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 public class CorsConfig {
 
-    @Value("${acao-social.frontend.baseUrl}")
+    @Value("${biblioteca-lbd.frontend.baseUrl}")
     private String urlFrontend;
 
     @Bean
