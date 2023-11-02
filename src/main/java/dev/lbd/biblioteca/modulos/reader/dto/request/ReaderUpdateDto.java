@@ -1,4 +1,9 @@
 package dev.lbd.biblioteca.modulos.reader.dto.request;
 
-public record ReaderUpdateDto() {
-}
+import java.time.LocalDateTime;
+
+public record ReaderUpdateDto(
+        String name,
+        LocalDateTime dateBirth,
+        String cpf
+) {}
