@@ -21,7 +21,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @EqualsAndHashCode
 @ToString
-@SQLDelete(sql = "UPDATE reader SET deleted_date = CURRENT_DATE where id=? and version=?")
+@SQLDelete(sql = "UPDATE reader SET deleted_date = CURRENT_DATE where id=? and version=?") // check if it is necessary
 public class ReaderEntity {
 
     @Valid
