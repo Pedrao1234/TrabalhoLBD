@@ -5,6 +5,7 @@ import dev.lbd.biblioteca.exceptions.ObjectNotFoundException;
 import dev.lbd.biblioteca.modulos.reader.dto.request.ReaderCreateDto;
 import dev.lbd.biblioteca.modulos.reader.dto.request.ReaderParamsDto;
 import dev.lbd.biblioteca.modulos.reader.dto.request.ReaderUpdateDto;
+import dev.lbd.biblioteca.modulos.reader.repository.ReaderPredicates;
 import dev.lbd.biblioteca.modulos.reader.repository.ReaderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,8 @@ import java.util.UUID;
 public class ReaderService {
     @Autowired
     private ReaderRepository readerRepository;
-//    @Autowired
-//    private ReaderPredicates readerPredicates;
+    @Autowired
+    private ReaderPredicates readerPredicates;
 
     public ReaderEntity create(ReaderCreateDto dataRequest) {
         ReaderEntity entity = new ReaderEntity();
@@ -29,11 +30,11 @@ public class ReaderService {
         return savedObj;
     }
 
-//    public Page<ReaderEntity> findAll(Pageable pageable, ReaderParamsDto filters) {
-//        BooleanExpression predicate = readerPredicates.buildPredicate(filters);
-//        Page<ReaderEntity> objects = readerRepository.findAll(pageable, predicate);
-//        return objects;
-//    }
+    public Page<ReaderEntity> findAll(Pageable pageable, ReaderParamsDto filters) {
+        BooleanExpression predicate = readerPredicates.buildPredicate(filters);
+        Page<ReaderEntity> objects = readerRepository.findAll(pageable, predicate);
+        return objects;
+    }
 
     public ReaderEntity findById(UUID id) {
         ReaderEntity obj = readerRepository.findById(id);

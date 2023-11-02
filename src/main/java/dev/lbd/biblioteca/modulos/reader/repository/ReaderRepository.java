@@ -2,6 +2,9 @@ package dev.lbd.biblioteca.modulos.reader.repository;
 
 //import com.querydsl.core.types.dsl.BooleanExpression;
 //import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import dev.lbd.biblioteca.modulos.reader.QReaderEntity;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -30,22 +33,22 @@ public class ReaderRepository {
         return readerEntity;
     }
 
-//    public Page<ReaderEntity> findAll(Pageable pageable, BooleanExpression predicate) {
-//        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-//        QReaderEntity qEntity = QReaderEntity.readerEntity;
-//        List<ReaderEntity> results = queryFactory.selectFrom(qEntity)
-//                .where(predicate)
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//        long total = queryFactory.query()
-//                .select(qEntity)
-//                .from(qEntity)
-//                .where(predicate)
-//                .fetch()
-//                .stream().count();
-//        return new PageImpl<>(results,pageable,total);
-//    }
+    public Page<ReaderEntity> findAll(Pageable pageable, BooleanExpression predicate) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
+        QReaderEntity qEntity = QReaderEntity.readerEntity;
+        List<ReaderEntity> results = queryFactory.selectFrom(qEntity)
+                .where(predicate)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        long total = queryFactory.query()
+                .select(qEntity)
+                .from(qEntity)
+                .where(predicate)
+                .fetch()
+                .stream().count();
+        return new PageImpl<>(results,pageable,total);
+    }
 
     public ReaderEntity findById(UUID id) {
         ReaderEntity readerEntity = readerPostgresRepository.findById(id).orElse(null);
