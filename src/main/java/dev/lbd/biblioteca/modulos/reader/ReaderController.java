@@ -102,9 +102,9 @@ public class ReaderController {
             @ApiResponse(responseCode = "200", description = "Successfully Updated"),
             @ApiResponse(responseCode = "400", description = "Invalid parameters"),
             @ApiResponse(responseCode = "401", description = "User is not authenticated"),
-            @ApiResponse(responseCode = "404", description = "Reade no found"),
+            @ApiResponse(responseCode = "404", description = "Reader no found"),
             @ApiResponse(responseCode = "422", description = "Invalid request data"),
-            @ApiResponse(responseCode = "500", description = "Error when creating social action"),
+            @ApiResponse(responseCode = "500", description = "Error when creating reader"),
     })
     public ResponseEntity<ReaderResponseDto> update(@PathVariable UUID id, @Valid @RequestBody ReaderUpdateDto request) {
         ReaderEntity entity = service.update(id, request);
