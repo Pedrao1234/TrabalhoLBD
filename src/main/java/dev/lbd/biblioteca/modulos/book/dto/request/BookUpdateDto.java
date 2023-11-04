@@ -1,4 +1,11 @@
 package dev.lbd.biblioteca.modulos.book.dto.request;
 
-public record BookUpdateDto() {
+import java.time.LocalDateTime;
+
+public record BookUpdateDto(
+        String title,
+        LocalDateTime releaseDate,
+        String publisher,
+        String summary
+) {
 }
