@@ -17,9 +17,9 @@ import java.util.UUID;
 @Service
 public class BookService {
     @Autowired
-    private BookRepository readerRepository;
+    private BookRepository bookRepository;
     @Autowired
-    private BookPredicates readerPredicates;
+    private BookPredicates bookPredicates;
 
     public BookEntity create(BookCreateDto dataRequest) {
         BookEntity entity = new BookEntity();
@@ -27,18 +27,18 @@ public class BookService {
         entity.setReleaseDate(dataRequest.releaseDate());
         entity.setPublisher(dataRequest.publisher());
         entity.setSummary(dataRequest.summary());
-        BookEntity savedObj = readerRepository.save(entity);
+        BookEntity savedObj = bookRepository.save(entity);
         return savedObj;
     }
 
     public Page<BookEntity> findAll(Pageable pageable, BookParamsDto filters) {
-        BooleanExpression predicate = readerPredicates.buildPredicate(filters);
-        Page<BookEntity> objects = readerRepository.findAll(pageable, predicate);
+        BooleanExpression predicate = bookPredicates.buildPredicate(filters);
+        Page<BookEntity> objects = bookRepository.findAll(pageable, predicate);
         return objects;
     }
 
     public BookEntity findById(UUID id) {
-        BookEntity obj = readerRepository.findById(id);
+        BookEntity obj = bookRepository.findById(id);
         if (obj == null) {
             throw new ObjectNotFoundException("Registro não encontrado: " + id);
         }
@@ -46,7 +46,7 @@ public class BookService {
     }
 
     public BookEntity update(UUID id, BookUpdateDto request) {
-        BookEntity obj = readerRepository.findById(id);
+        BookEntity obj = bookRepository.findById(id);
         if (request.title() != null) {
             obj.setTitle(request.title());
         }
@@ -59,12 +59,12 @@ public class BookService {
         if (request.summary() != null) {
             obj.setSummary(request.summary());
         }
-        BookEntity updatedObj = readerRepository.update(obj);
+        BookEntity updatedObj = bookRepository.update(obj);
         return updatedObj;
     }
 
     public void delete(UUID id) {
-        readerRepository.delete(id);
+        bookRepository.delete(id);
     }
 
 }

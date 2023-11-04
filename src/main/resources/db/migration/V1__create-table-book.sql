@@ -25,22 +25,25 @@ begin
     return new;
 end;
 $ language plpgsql;
-create or replace function on_delete_book()
+create or replace function on_soft_delete_book()
 returns trigger as $$
 begin
     new.deleted_date := current_timestamp;
     return new;
 end;
 $ language plpgsql;
+
 create trigger book_pre_update_trigger
 before update on book
 for each row
 execute function on_update_book();
+
 create trigger book_pre_insert_trigger
 before insert on book
 for each row
 execute function on_create_book();
-create trigger book_pre_delete_trigger
+
+create trigger book_soft_delete_trigger
 before delete on book
 for each row
-execute function on_delete_book();
+execute function on_soft_delete_book();
