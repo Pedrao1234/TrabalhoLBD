@@ -14,12 +14,9 @@ public class RentPredicates {
     public BooleanExpression buildPredicate(RentParamsDto filters) {
         QRentEntity qEntity = QRentEntity.rentEntity;
         BooleanExpression predicate = Expressions.asBoolean(true).isTrue();
-//        if (filters.readerId() != null) {
-//            predicate = predicate.and(qEntity.reader.id.in(filters.readerId()));
-//        }
-//        if (filters.bookId() != null) {
-//            predicate = predicate.and(qEntity.book.id.in(filters.bookId()));
-//        }
+        if (filters.readerId() != null) {
+            predicate = predicate.and(qEntity.reader.id.in(filters.readerId()));
+        }
         if (filters.rentDate() != null) {
             DateTimePath<LocalDateTime> filterPath = qEntity.rentDate;
             predicate = predicate.and(filterPath.eq(filters.rentDate()));

@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public record RentParamsDto(
         UUID readerId,
-        UUID bookId,
         LocalDateTime rentDate,
         LocalDateTime devolutionDate,
         StatusEnum status

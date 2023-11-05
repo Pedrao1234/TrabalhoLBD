@@ -6,10 +6,6 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record RentUpdateDto(
-        UUID readerId,
-        UUID bookId,
-        LocalDateTime rentDate,
-        LocalDateTime devolutionDate,
         StatusEnum status
 ) {
 }
