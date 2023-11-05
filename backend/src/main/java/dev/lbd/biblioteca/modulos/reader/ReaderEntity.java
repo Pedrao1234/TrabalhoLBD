@@ -1,5 +1,6 @@
 package dev.lbd.biblioteca.modulos.reader;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import dev.lbd.biblioteca.modulos.rent.RentEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -56,8 +57,9 @@ public class ReaderEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-    @OneToOne
-    @JoinColumn(name = "rent_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rent_id")
+    @JsonBackReference
     private RentEntity rent;
 
 
