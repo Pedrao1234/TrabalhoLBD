@@ -1,8 +1,9 @@
 package dev.lbd.biblioteca.modulos.rent.enums;
 
 public enum StatusEnum {
-    OPEN("Aberto "),
-    CLOSED("Fechado");
+    OCURRING("Alugado "),
+    DELAYED("Atrasado"),
+    FINISHED("Devolução concluída");
 
     private final String label;
 
