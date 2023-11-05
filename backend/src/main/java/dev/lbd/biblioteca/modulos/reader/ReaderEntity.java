@@ -57,8 +57,7 @@ public class ReaderEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rent_id")
+    @OneToOne(mappedBy = "reader")
     @JsonBackReference
     private RentEntity rent;
 

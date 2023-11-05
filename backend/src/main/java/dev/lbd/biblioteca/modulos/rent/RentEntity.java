@@ -1,5 +1,6 @@
 package dev.lbd.biblioteca.modulos.rent;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.lbd.biblioteca.modulos.book.BookEntity;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
@@ -40,12 +41,12 @@ public class RentEntity {
     @NotNull
     UUID id;
 
-    @OneToOne(mappedBy = "rent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "reader_id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reader_id", referencedColumnName = "id")
     @JsonManagedReference
     private ReaderEntity reader;
 
-    @OneToMany(mappedBy = "rent", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "rent", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<BookEntity> book;
 

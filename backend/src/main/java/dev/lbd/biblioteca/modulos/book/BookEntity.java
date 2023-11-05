@@ -1,6 +1,7 @@
 package dev.lbd.biblioteca.modulos.book;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
 import dev.lbd.biblioteca.modulos.rent.RentEntity;
 import jakarta.persistence.*;
@@ -60,6 +61,7 @@ public class BookEntity {
     private LocalDateTime deletedDate;
 
     @ManyToOne
+    @JoinColumn(name = "rent_id")
     @JsonBackReference
     private RentEntity rent;
 

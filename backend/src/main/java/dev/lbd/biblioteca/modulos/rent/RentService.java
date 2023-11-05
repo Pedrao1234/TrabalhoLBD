@@ -41,6 +41,7 @@ public class RentService {
             if (optionalBook == null){
                 throw new ObjectNotFoundException("Book not found");
             }
+            optionalBook.setRent(entity);
             books.add(optionalBook);
         }
         entity.setBook(books);

@@ -2,6 +2,7 @@
 create table book (
     version bigint not null,
     id uuid not null,
+    rent_id uuid,
     title varchar(255) not null,
     release_date timestamp,
     publisher varchar(255) not null,
@@ -9,7 +10,9 @@ create table book (
     created_date timestamp,
     last_modified_date timestamp,
     deleted_date timestamp,
-    constraint pk_book primary key (id)
+    primary key (id),
+    foreign key (rent_id) references rent (id)
+
 );
 create or replace function on_update_book()
 returns trigger as $$
@@ -47,7 +50,3 @@ create trigger book_soft_delete_trigger
 before delete on book
 for each row
 execute function on_soft_delete_book();
-
-alter table book
-add constraint fk_book_rent
-foreign key (id) references rent (book_id);
