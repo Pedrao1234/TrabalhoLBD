@@ -15,7 +15,7 @@ public class ReaderPredicates {
         BooleanExpression predicate = Expressions.asBoolean(true).isTrue();
         if (filters.name() != null) {
             StringPath filterPath = qEntity.name;
-            predicate = predicate.and(filterPath.eq(filters.name()));
+            predicate = predicate.and(filterPath.like(filters.name() + "%"));
         }
         if (filters.cpf() != null) {
             StringPath filterPath = qEntity.cpf;

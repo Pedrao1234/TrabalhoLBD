@@ -15,11 +15,11 @@ public class BookPredicates {
         BooleanExpression predicate = Expressions.asBoolean(true).isTrue();
         if (filters.title() != null) {
             StringPath filterPath = qEntity.title;
-            predicate = predicate.and(filterPath.eq(filters.title()));
+            predicate = predicate.and(filterPath.like(filters.title() + "%"));
         }
         if (filters.publisher() != null) {
             StringPath filterPath = qEntity.publisher;
-            predicate = predicate.and(filterPath.eq(filters.publisher()));
+            predicate = predicate.and(filterPath.eq(filters.publisher() + "%"));
         }
         if (filters.releaseDate() != null) {
             DateTimePath<LocalDateTime> filterPath = qEntity.releaseDate;
