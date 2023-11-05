@@ -1,5 +1,6 @@
 package dev.lbd.biblioteca.modulos.rent;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.lbd.biblioteca.modulos.book.BookEntity;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
 import dev.lbd.biblioteca.modulos.rent.enums.StatusEnum;
@@ -15,6 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.awt.print.Book;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name="rent")
@@ -38,11 +40,13 @@ public class RentEntity {
     @NotNull
     UUID id;
 
-//    @Column(name = "reader_id", nullable = false)
-//    private ReaderEntity reader;
-//
-//    @Column(name = "book_id", nullable = false)
-//    private BookEntity book;
+    @OneToOne
+    @JoinColumn(name = "reader_id", referencedColumnName = "id")
+    private ReaderEntity reader;
+
+    @OneToMany(mappedBy = "rent", fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<BookEntity> book;
 
     @Column(name = "rent_date", nullable = false)
     private LocalDateTime rentDate;

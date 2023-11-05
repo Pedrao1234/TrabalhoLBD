@@ -1,5 +1,8 @@
 package dev.lbd.biblioteca.modulos.book;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
+import dev.lbd.biblioteca.modulos.rent.RentEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -55,6 +58,10 @@ public class BookEntity {
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
+
+    @ManyToOne
+    @JsonBackReference
+    private RentEntity rent;
 
 
     @PrePersist

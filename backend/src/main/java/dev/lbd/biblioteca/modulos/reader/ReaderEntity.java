@@ -1,5 +1,6 @@
 package dev.lbd.biblioteca.modulos.reader;
 
+import dev.lbd.biblioteca.modulos.rent.RentEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -54,6 +55,10 @@ public class ReaderEntity {
 
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
+
+    @OneToOne
+    @JoinColumn(name = "rent_id", referencedColumnName = "id")
+    private RentEntity rent;
 
 
     @PrePersist
