@@ -47,3 +47,7 @@ create trigger book_soft_delete_trigger
 before delete on book
 for each row
 execute function on_soft_delete_book();
+
+alter table book
+add constraint fk_book_rent
+foreign key (id) references rent (book_id);

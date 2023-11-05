@@ -40,8 +40,9 @@ public class RentEntity {
     @NotNull
     UUID id;
 
-    @OneToOne
-    @JoinColumn(name = "reader_id", referencedColumnName = "id")
+    @OneToOne(mappedBy = "rent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "reader_id")
+    @JsonManagedReference
     private ReaderEntity reader;
 
     @OneToMany(mappedBy = "rent", fetch = FetchType.LAZY)

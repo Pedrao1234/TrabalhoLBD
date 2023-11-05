@@ -9,6 +9,7 @@ import dev.lbd.biblioteca.modulos.reader.repository.ReaderRepository;
 import dev.lbd.biblioteca.modulos.rent.dto.request.RentCreateDto;
 import dev.lbd.biblioteca.modulos.rent.dto.request.RentParamsDto;
 import dev.lbd.biblioteca.modulos.rent.dto.request.RentUpdateDto;
+import dev.lbd.biblioteca.modulos.rent.enums.StatusEnum;
 import dev.lbd.biblioteca.modulos.rent.repository.RentPredicates;
 import dev.lbd.biblioteca.modulos.rent.repository.RentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class RentService {
         entity.setReader(reader);
         entity.setRentDate(dataRequest.rentDate());
         entity.setDevolutionDate(dataRequest.devolutionDate());
+        entity.setStatus(StatusEnum.OCURRING);
 
         RentEntity savedObj = rentRepository.save(entity);
         return savedObj;
