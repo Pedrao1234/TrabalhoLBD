@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CadastroLivro.css';
+import styles from './CadastroLivro.module.css';
 
 function CadastroLivro() {
   const [nome, setNome] = useState('');
@@ -13,7 +13,7 @@ function CadastroLivro() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Cadastro de Livro</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
