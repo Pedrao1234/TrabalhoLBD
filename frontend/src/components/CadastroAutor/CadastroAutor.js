@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './CadastroAutor.css';
+import styles from './CadastroAutor.module.css';
 function CadastroAutor() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
@@ -12,7 +12,7 @@ function CadastroAutor() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Cadastro de Autor</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './HomePage.css'; // Importe o arquivo CSS
+import styles from './HomePage.module.css'; // Importe o arquivo CSS
 
 function HomePage() {
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h2>Bem-vindo à Biblioteca</h2>
       <p>Escolha uma opção abaixo:</p>
 
@@ -20,6 +20,9 @@ function HomePage() {
         </li>
         <li>
           <Link to="/aluguel-livro">Aluguel de Livro</Link>
+        </li>
+        <li>
+          <Link to="/devolver-livro">Devolver Livro</Link>
         </li>
       </ul>
     </div>
