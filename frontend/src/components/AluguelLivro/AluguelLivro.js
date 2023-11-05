@@ -1,14 +1,38 @@
 import React, { useState } from 'react';
-import  styles from './AluguelLivro.module.css';
+import styles from './AluguelLivro.module.css';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 function AluguelLivro() {
   const [usuario, setUsuario] = useState('');
   const [livro, setLivro] = useState('');
   const [dataAluguel, setDataAluguel] = useState('');
   const [dataDevolucao, setDataDevolucao] = useState('');
+  const [showModal, setShowModal] = useState(false); // Estado para controlar a exibição do modal
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Implemente a lógica para enviar os dados para o backend aqui
+
+    try {
+      const response = await axios.post('/seu-endpoint-de-post', {
+        usuario,
+        livro,
+        dataAluguel,
+        dataDevolucao,
+      });
+
+      if (response.status === 200) {
+        setShowModal(true); // Mostra o modal
+      }
+    } catch (error) {
+      console.error('Erro ao enviar POST request:', error);
+    }
+  };
+
+  const handleModalOkClick = () => {
+    setShowModal(false); // Fecha o modal
+    navigate('/'); // Redireciona para a página inicial
   };
 
   return (
@@ -21,6 +45,15 @@ function AluguelLivro() {
         <input type="text" placeholder="Data de Devolução" value={dataDevolucao} onChange={(e) => setDataDevolucao(e.target.value)} />
         <button type="submit">Alugar</button>
       </form>
+
+      {showModal && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <p>Aluguel efetuado com sucesso!</p>
+            <button onClick={handleModalOkClick}>Ok</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
