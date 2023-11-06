@@ -9,7 +9,6 @@ public record BookUpdateDto(
         LocalDateTime releaseDate,
         String publisher,
         String summary,
-
         StatusBook status
 ) {
 }

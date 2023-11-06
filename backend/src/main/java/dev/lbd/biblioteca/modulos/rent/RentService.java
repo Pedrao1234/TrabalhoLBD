@@ -3,6 +3,7 @@ package dev.lbd.biblioteca.modulos.rent;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import dev.lbd.biblioteca.exceptions.ObjectNotFoundException;
 import dev.lbd.biblioteca.modulos.book.BookEntity;
+import dev.lbd.biblioteca.modulos.book.enums.StatusBook;
 import dev.lbd.biblioteca.modulos.book.repository.BookRepository;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
 import dev.lbd.biblioteca.modulos.reader.repository.ReaderRepository;
@@ -41,6 +42,10 @@ public class RentService {
             if (optionalBook == null){
                 throw new ObjectNotFoundException("Book not found");
             }
+            if (optionalBook.getStatus() == StatusBook.UNAVAILABLE){
+                throw new RuntimeException("Book not Available");
+            }
+            optionalBook.setStatus(StatusBook.UNAVAILABLE);
             optionalBook.setRent(entity);
             books.add(optionalBook);
         }
