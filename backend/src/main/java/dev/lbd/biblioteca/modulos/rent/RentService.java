@@ -83,11 +83,26 @@ public class RentService {
         if (request.status() != null) {
             obj.setStatus(request.status());
         }
+        if (request.status() == StatusEnum.FINISHED){
+            obj.setReader(null);
+            for (BookEntity book : obj.getBook()){
+                book.setStatus(StatusBook.AVAILABLE);
+                bookRepository.update(book);
+            }
+        }
         RentEntity updatedObj = rentRepository.update(obj);
         return updatedObj;
     }
 
     public void delete(UUID id) {
+        RentEntity obj = rentRepository.findById(id);
+        obj.setStatus(StatusEnum.FINISHED);
+        obj.setReader(null);
+        for (BookEntity book : obj.getBook()){
+            book.setStatus(StatusBook.AVAILABLE);
+            book.setRent(null);
+            bookRepository.update(book);
+        }
         rentRepository.delete(id);
     }
 
