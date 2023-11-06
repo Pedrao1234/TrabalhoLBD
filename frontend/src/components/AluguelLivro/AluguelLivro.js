@@ -8,9 +8,9 @@ function AluguelLivro() {
   const [livro, setLivro] = useState('');
   const [dataAluguel, setDataAluguel] = useState('');
   const [dataDevolucao, setDataDevolucao] = useState('');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal de sucesso
-  const [showErrorModal, setShowErrorModal] = useState(false); // Modal de erro
-  const [errorMessage, setErrorMessage] = useState(''); // Mensagem de erro
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,22 +25,46 @@ function AluguelLivro() {
       });
 
       if (response.status === 200) {
-        setShowSuccessModal(true); // Mostra o modal de sucesso
+        setShowSuccessModal(true);
       }
     } catch (error) {
       console.error('Erro ao enviar POST request:', error);
       setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
-      setShowErrorModal(true); // Mostra o modal de erro
+      setShowErrorModal(true);
     }
   };
 
   const handleSuccessModalOkClick = () => {
-    setShowSuccessModal(false); // Fecha o modal de sucesso
-    navigate('/'); // Redireciona para a página inicial
+    setShowSuccessModal(false);
+    navigate('/');
   };
 
   const handleErrorModalOkClick = () => {
-    setShowErrorModal(false); // Fecha o modal de erro
+    setShowErrorModal(false);
+  };
+
+  // Função para formatar a data enquanto o usuário digita
+  const handleDataAluguelChange = (e) => {
+    const inputDate = e.target.value;
+    if (/^\d{2}$/.test(inputDate)) {
+      setDataAluguel(inputDate + '/');
+    } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
+      setDataAluguel(inputDate + '/');
+    } else {
+      setDataAluguel(inputDate);
+    }
+  };
+
+  // Função para formatar a data de devolução enquanto o usuário digita
+  const handleDataDevolucaoChange = (e) => {
+    const inputDate = e.target.value;
+    if (/^\d{2}$/.test(inputDate)) {
+      setDataDevolucao(inputDate + '/');
+    } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
+      setDataDevolucao(inputDate + '/');
+    } else {
+      setDataDevolucao(inputDate);
+    }
   };
 
   return (
@@ -49,8 +73,8 @@ function AluguelLivro() {
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome do Usuário" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
         <input type="text" placeholder="Nome do Livro" value={livro} onChange={(e) => setLivro(e.target.value)} />
-        <input type="text" placeholder="Data de Aluguel" value={dataAluguel} onChange={(e) => setDataAluguel(e.target.value)} />
-        <input type="text" placeholder="Data de Devolução" value={dataDevolucao} onChange={(e) => setDataDevolucao(e.target.value)} />
+        <input type="text" placeholder="Data de Aluguel (dd/MM/yyyy)" value={dataAluguel} onChange={handleDataAluguelChange} />
+        <input type="text" placeholder="Data de Devolução (dd/MM/yyyy)" value={dataDevolucao} onChange={handleDataDevolucaoChange} />
         <button type="submit">Alugar</button>
       </form>
 

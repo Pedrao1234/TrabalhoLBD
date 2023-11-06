@@ -8,9 +8,9 @@ function CadastroAutor() {
   const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [sexo, setSexo] = useState('');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal de sucesso
-  const [showErrorModal, setShowErrorModal] = useState(false); // Modal de erro
-  const [errorMessage, setErrorMessage] = useState(''); // Mensagem de erro
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,22 +25,34 @@ function CadastroAutor() {
       });
 
       if (response.status === 200) {
-        setShowSuccessModal(true); // Mostra o modal de sucesso
+        setShowSuccessModal(true);
       }
     } catch (error) {
       console.error('Erro ao enviar POST request:', error);
       setErrorMessage('Erro ao efetuar o cadastro de autor. Por favor, tente novamente.');
-      setShowErrorModal(true); // Mostra o modal de erro
+      setShowErrorModal(true);
     }
   };
 
   const handleSuccessModalOkClick = () => {
-    setShowSuccessModal(false); // Fecha o modal de sucesso
-    navigate('/'); // Redireciona para a página inicial
+    setShowSuccessModal(false);
+    navigate('/');
   };
 
   const handleErrorModalOkClick = () => {
-    setShowErrorModal(false); // Fecha o modal de erro
+    setShowErrorModal(false);
+  };
+
+  // Função para formatar a data enquanto o usuário digita
+  const handleDataNascimentoChange = (e) => {
+    const inputDate = e.target.value;
+    if (/^\d{2}$/.test(inputDate)) {
+      setDataNascimento(inputDate + '/');
+    } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
+      setDataNascimento(inputDate + '/');
+    } else {
+      setDataNascimento(inputDate);
+    }
   };
 
   return (
@@ -49,7 +61,7 @@ function CadastroAutor() {
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
         <input type="text" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} />
-        <input type="text" placeholder="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
+        <input type="text" placeholder="Data de Nascimento (dd/MM/yyyy)" value={dataNascimento} onChange={handleDataNascimentoChange} />
         <input type="text" placeholder="Sexo" value={sexo} onChange={(e) => setSexo(e.target.value)} />
         <button type="submit">Cadastrar</button>
       </form>

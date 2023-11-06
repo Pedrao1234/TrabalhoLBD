@@ -3,14 +3,15 @@ import styles from './CadastroLivro.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 function CadastroLivro() {
   const [nome, setNome] = useState('');
   const [dataLancamento, setDataLancamento] = useState('');
   const [autor, setAutor] = useState('');
   const [sumario, setSumario] = useState('');
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // Modal de sucesso
-  const [showErrorModal, setShowErrorModal] = useState(false); // Modal de erro
-  const [errorMessage, setErrorMessage] = useState(''); // Mensagem de erro
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -25,22 +26,34 @@ function CadastroLivro() {
       });
 
       if (response.status === 200) {
-        setShowSuccessModal(true); // Mostra o modal de sucesso
+        setShowSuccessModal(true);
       }
     } catch (error) {
       console.error('Erro ao enviar POST request:', error);
       setErrorMessage('Erro ao efetuar o cadastro de livro. Por favor, tente novamente.');
-      setShowErrorModal(true); // Mostra o modal de erro
+      setShowErrorModal(true);
     }
   };
 
   const handleSuccessModalOkClick = () => {
-    setShowSuccessModal(false); // Fecha o modal de sucesso
-    navigate('/'); // Redireciona para a página inicial, se desejado
+    setShowSuccessModal(false);
+    navigate('/');
   };
 
   const handleErrorModalOkClick = () => {
-    setShowErrorModal(false); // Fecha o modal de erro
+    setShowErrorModal(false);
+  };
+
+  // Função para formatar a data enquanto o usuário digita
+  const handleDataLancamentoChange = (e) => {
+    const inputDate = e.target.value;
+    if (/^\d{2}$/.test(inputDate)) {
+      setDataLancamento(inputDate + '/');
+    } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
+      setDataLancamento(inputDate + '/');
+    } else {
+      setDataLancamento(inputDate);
+    }
   };
 
   return (
@@ -48,7 +61,7 @@ function CadastroLivro() {
       <h1>Cadastro de Livro</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-        <input type="text" placeholder="Data de Lançamento" value={dataLancamento} onChange={(e) => setDataLancamento(e.target.value)} />
+        <input type="text" placeholder="Data de Lançamento (dd/MM/yyyy)" value={dataLancamento} onChange={handleDataLancamentoChange} />
         <input type="text" placeholder="Autor" value={autor} onChange={(e) => setAutor(e.target.value)} />
         <textarea placeholder="Sumário" value={sumario} onChange={(e) => setSumario(e.target.value)} />
         <button type="submit">Cadastrar</button>
