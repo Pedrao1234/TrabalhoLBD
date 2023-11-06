@@ -1,8 +1,10 @@
 package dev.lbd.biblioteca.modulos.author;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.lbd.biblioteca.modulos.author.enums.SexAuthor;
 import dev.lbd.biblioteca.modulos.author.AuthorEntity;
+import dev.lbd.biblioteca.modulos.bookAuthor.BookAuthorEntity;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -14,6 +16,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name="author")
@@ -58,10 +61,10 @@ public class AuthorEntity {
     @Column(name = "deleted_date")
     private LocalDateTime deletedDate;
 
-//    @ManyToOne
-//    @JoinColumn(name = "rent_id")
-//    @JsonBackReference
-//    private AuthorEntity author;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private List<BookAuthorEntity> bookAuthor;
+
 
 
     @PrePersist
