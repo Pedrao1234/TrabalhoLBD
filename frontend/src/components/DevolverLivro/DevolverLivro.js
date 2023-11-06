@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './DevolverLivro.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -73,11 +73,40 @@ function DevolverLivro() {
     setShowErrorModal(false);
   };
 
+  const [usuariosSugeridos, setUsuariosSugeridos] = useState([]);
+
+  useEffect(() => {
+    // Busque a lista de usuarios do seu sistema a partir de uma API ou outra fonte de dados em tempo real
+    async function fetchUsuarios() {
+      try {
+        const response = await axios.get('/seu-endpoint-de-usuarios');
+        const usuariosDoSistema = response.data;
+        setUsuariosSugeridos(usuariosDoSistema);
+      } catch (error) {
+        console.error('Erro ao buscar a lista de usuarios:', error);
+      }
+    }
+
+    fetchUsuarios();
+  }, []);
+
+  const handleUsuarioChange = (e) => {
+    const inputUsuario = e.target.value;
+    setUsuario(inputUsuario);
+  }
+
   return (
     <div className={styles.container}>
       <h1>Devolução de Livro</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Nome do Usuário" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
+        <input type="text" placeholder="Nome do Usuário" value={usuario} onChange={handleUsuarioChange} />
+        <ul>
+        {usuariosSugeridos.map((sugestao, index) => (
+          <li key={index} onClick={() => setUsuario(sugestao)}>
+            {sugestao}
+          </li>
+        ))}
+      </ul>
         <input type="text" placeholder="Nome do Livro" value={livro} onChange={(e) => setLivro(e.target.value)} />
         <input type="text" placeholder="Data de Devolução (dd/MM/yyyy)" value={dataDevolucao} onChange={handleDataDevolucaoChange} />
         <button type="submit">Registrar Devolução</button>

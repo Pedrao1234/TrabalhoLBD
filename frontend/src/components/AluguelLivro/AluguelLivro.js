@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './AluguelLivro.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ function AluguelLivro() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
+  const [livrosSugeridos, setLivrosSugeridos] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,12 +68,39 @@ function AluguelLivro() {
     }
   };
 
+  useEffect(() => {
+    // Busque a lista de livros do seu sistema a partir de uma API ou outra fonte de dados em tempo real
+    async function fetchLivros() {
+      try {
+        const response = await axios.get('/seu-endpoint-de-livros');
+        const livrosDoSistema = response.data;
+        setLivrosSugeridos(livrosDoSistema);
+      } catch (error) {
+        console.error('Erro ao buscar a lista de livros:', error);
+      }
+    }
+
+    fetchLivros();
+  }, []);
+
+  const handleLivrosChange = (e) => {
+    const inputLivro = e.target.value;
+    setLivro(inputLivro);
+  }
+
   return (
     <div className={styles.container}>
       <h1>Aluguel de Livro</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome do Usuário" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
-        <input type="text" placeholder="Nome do Livro" value={livro} onChange={(e) => setLivro(e.target.value)} />
+        <input type="text" placeholder="Nome do Livro" value={livro} onChange={handleLivrosChange} />
+        <ul>
+        {livrosSugeridos.map((sugestao, index) => (
+          <li key={index} onClick={() => setLivro(sugestao)}>
+            {sugestao}
+          </li>
+        ))}
+      </ul>
         <input type="text" placeholder="Data de Aluguel (dd/MM/yyyy)" value={dataAluguel} onChange={handleDataAluguelChange} />
         <input type="text" placeholder="Data de Devolução (dd/MM/yyyy)" value={dataDevolucao} onChange={handleDataDevolucaoChange} />
         <button type="submit">Alugar</button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './CadastroLivro.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -56,13 +56,42 @@ function CadastroLivro() {
     }
   };
 
+  const [autoresSugeridos, setAutoresSugeridos] = useState([]);
+
+  useEffect(() => {
+    // Busque a lista de autores do seu sistema a partir de uma API ou outra fonte de dados em tempo real
+    async function fetchAutores() {
+      try {
+        const response = await axios.get('/seu-endpoint-de-autores');
+        const autoresDoSistema = response.data;
+        setAutoresSugeridos(autoresDoSistema);
+      } catch (error) {
+        console.error('Erro ao buscar a lista de autores:', error);
+      }
+    }
+
+    fetchAutores();
+  }, []);
+
+  const handleAutorChange = (e) => {
+    const inputAutor = e.target.value;
+    setAutor(inputAutor);
+  }
+
   return (
     <div className={styles.container}>
       <h1>Cadastro de Livro</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
         <input type="text" placeholder="Data de Lançamento (dd/MM/yyyy)" value={dataLancamento} onChange={handleDataLancamentoChange} />
-        <input type="text" placeholder="Autor" value={autor} onChange={(e) => setAutor(e.target.value)} />
+        <input type="text" placeholder="Autor" value={autor} onChange={handleAutorChange} />
+        <ul>
+        {autoresSugeridos.map((sugestao, index) => (
+          <li key={index} onClick={() => setAutor(sugestao)}>
+            {sugestao}
+          </li>
+        ))}
+      </ul>
         <textarea placeholder="Sumário" value={sumario} onChange={(e) => setSumario(e.target.value)} />
         <button type="submit">Cadastrar</button>
       </form>
