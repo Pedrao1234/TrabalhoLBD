@@ -16,6 +16,12 @@ function CadastroAutor() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (cpf.length !== 11) {
+      setErrorMessage('O CPF deve conter exatamente 11 caracteres.');
+      setShowErrorModal(true); // Mostra o modal de erro
+      return;
+    }
+
     try {
       const response = await axios.post('/seu-endpoint-de-post', {
         nome,
