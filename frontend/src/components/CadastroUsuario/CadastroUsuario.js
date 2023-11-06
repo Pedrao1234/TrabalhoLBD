@@ -3,6 +3,7 @@ import styles from './CadastroUsuario.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 function CadastroUsuario() {
   const [nome, setNome] = useState('');
   const [cpf, setCpf] = useState('');
@@ -14,6 +15,12 @@ function CadastroUsuario() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (cpf.length !== 11) {
+      setErrorMessage('O CPF deve conter exatamente 11 caracteres.');
+      setShowErrorModal(true); // Mostra o modal de erro
+      return;
+    }
 
     try {
       const response = await axios.post('/seu-endpoint-de-post', {
