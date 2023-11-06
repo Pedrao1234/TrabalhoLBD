@@ -3,6 +3,7 @@ package dev.lbd.biblioteca.modulos.book.repository;
 import com.querydsl.core.types.dsl.*;
 import dev.lbd.biblioteca.modulos.book.QBookEntity;
 import dev.lbd.biblioteca.modulos.book.dto.request.BookParamsDto;
+import dev.lbd.biblioteca.modulos.book.enums.StatusBook;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,10 @@ public class BookPredicates {
         if (filters.summary() != null) {
             StringPath filterPath = qEntity.summary;
             predicate = predicate.and(filterPath.eq(filters.summary()));
+        }
+        if (filters.status() != null) {
+            EnumPath<StatusBook> filterPath = qEntity.status;
+            predicate = predicate.and(filterPath.eq(filters.status()));
         }
         return predicate;
     }

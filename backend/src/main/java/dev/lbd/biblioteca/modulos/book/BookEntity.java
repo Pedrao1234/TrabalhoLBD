@@ -2,6 +2,7 @@ package dev.lbd.biblioteca.modulos.book;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import dev.lbd.biblioteca.modulos.book.enums.StatusBook;
 import dev.lbd.biblioteca.modulos.reader.ReaderEntity;
 import dev.lbd.biblioteca.modulos.rent.RentEntity;
 import jakarta.persistence.*;
@@ -48,6 +49,10 @@ public class BookEntity {
 
     @Column(name = "summary", nullable = false)
     String summary;
+
+    @Column(name = "status", nullable = false)
+    @Enumerated
+    StatusBook status;
 
     @CreatedDate
     @Column(name = "created_date")

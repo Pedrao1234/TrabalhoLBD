@@ -5,6 +5,7 @@ import dev.lbd.biblioteca.exceptions.ObjectNotFoundException;
 import dev.lbd.biblioteca.modulos.book.dto.request.BookCreateDto;
 import dev.lbd.biblioteca.modulos.book.dto.request.BookParamsDto;
 import dev.lbd.biblioteca.modulos.book.dto.request.BookUpdateDto;
+import dev.lbd.biblioteca.modulos.book.enums.StatusBook;
 import dev.lbd.biblioteca.modulos.book.repository.BookPredicates;
 import dev.lbd.biblioteca.modulos.book.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class BookService {
         entity.setReleaseDate(dataRequest.releaseDate());
         entity.setPublisher(dataRequest.publisher());
         entity.setSummary(dataRequest.summary());
+        entity.setStatus(StatusBook.AVAILABLE);
         BookEntity savedObj = bookRepository.save(entity);
         return savedObj;
     }
@@ -58,6 +60,9 @@ public class BookService {
         }
         if (request.summary() != null) {
             obj.setSummary(request.summary());
+        }
+        if (request.status() != null) {
+            obj.setStatus(request.status());
         }
         BookEntity updatedObj = bookRepository.update(obj);
         return updatedObj;

@@ -7,6 +7,7 @@ create table book (
     release_date timestamp,
     publisher varchar(255) not null,
     summary varchar(255) not null,
+    status varchar(255) NOT NULL,
     created_date timestamp,
     last_modified_date timestamp,
     deleted_date timestamp,

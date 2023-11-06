@@ -36,6 +36,7 @@ public class BookController {
                 entity.getReleaseDate(),
                 entity.getPublisher(),
                 entity.getSummary(),
+                entity.getStatus(),
                 entity.getRent(),
                 entity.getCreatedDate(),
                 entity.getLastModifiedDate(),
