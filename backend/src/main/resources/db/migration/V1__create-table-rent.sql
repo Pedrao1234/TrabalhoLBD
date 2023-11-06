@@ -1,7 +1,7 @@
 CREATE TABLE rent (
   version BIGINT NOT NULL,
   id UUID NOT NULL,
-  reader_id UUID NOT NULL,
+  reader_id UUID,
   rent_date TIMESTAMP NOT NULL,
   devolution_date TIMESTAMP,
   status VARCHAR(255) NOT NULL,
@@ -19,6 +19,7 @@ begin
     return new;
 end;
 $ language plpgsql;
+
 create or replace function on_create_rent()
 returns trigger as $$
 begin
@@ -26,6 +27,7 @@ begin
     return new;
 end;
 $ language plpgsql;
+
 create or replace function on_soft_delete_rent()
 returns trigger as $$
 begin
@@ -48,3 +50,4 @@ create trigger rent_soft_delete_trigger
 before delete on rent
 for each row
 execute function on_soft_delete_rent();
+

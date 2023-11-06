@@ -22,6 +22,7 @@ begin
     return new;
 end;
 $ language plpgsql;
+
 create or replace function on_create_book()
 returns trigger as $$
 begin
@@ -29,6 +30,7 @@ begin
     return new;
 end;
 $ language plpgsql;
+
 create or replace function on_soft_delete_book()
 returns trigger as $$
 begin
