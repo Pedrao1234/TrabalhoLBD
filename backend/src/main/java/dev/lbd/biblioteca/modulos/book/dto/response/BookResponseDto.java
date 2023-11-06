@@ -1,5 +1,6 @@
 package dev.lbd.biblioteca.modulos.book.dto.response;
 
+import dev.lbd.biblioteca.modulos.book.enums.StatusBook;
 import dev.lbd.biblioteca.modulos.rent.RentEntity;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,7 @@ public record BookResponseDto (
         LocalDateTime releaseDate,
         String publisher,
         String summary,
+        StatusBook status,
         RentEntity rent,
         LocalDateTime createdAt,
         LocalDateTime lastModifiedAt,
