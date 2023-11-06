@@ -96,7 +96,9 @@ public class RentService {
 
     public void delete(UUID id) {
         RentEntity obj = rentRepository.findById(id);
-        obj.setStatus(StatusEnum.FINISHED);
+        if (obj.getStatus() != StatusEnum.FINISHED){
+            throw new RuntimeException("Not possible to proceed with deleting because Rent Status is not FINISHED");
+        }
         obj.setReader(null);
         for (BookEntity book : obj.getBook()){
             book.setStatus(StatusBook.AVAILABLE);
