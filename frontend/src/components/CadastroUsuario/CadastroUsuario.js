@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './CadastroUsuario.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import { format } from 'date-fns';
 
 function CadastroUsuario() {
   const [nome, setNome] = useState('');
@@ -22,11 +22,23 @@ function CadastroUsuario() {
       return;
     }
 
+    // Formata a data de nascimento
+  const formattedDataNascimento = format(new Date(dataNascimento), 'dd/MM/yyyy');
+
+  // Verifica se a dataNascimento é uma string em um formato válido, por exemplo, "dd/MM/yyyy"
+  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+  if (!dateRegex.test(dataNascimento)) {
+    setErrorMessage('Formato de data de nascimento inválido. Use o formato "dd/MM/yyyy".');
+    setShowErrorModal(true);
+    return;
+  }
+
+
     try {
       const response = await axios.post('/seu-endpoint-de-post', {
         nome,
         cpf,
-        dataNascimento,
+        dataNascimento: formattedDataNascimento,
       });
 
       if (response.status === 200) {
@@ -48,13 +60,28 @@ function CadastroUsuario() {
     setShowErrorModal(false); // Fecha o modal de erro
   };
 
+    // Função para formatar a data enquanto o usuário digita
+    const handleDataNascimentoChange = (e) => {
+      const inputDate = e.target.value;
+      if (/^\d{2}$/.test(inputDate)) {
+        // Adiciona uma barra após os dois primeiros dígitos
+        setDataNascimento(inputDate + '/');
+      } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
+        // Adiciona uma barra após os quatro primeiros dígitos
+        setDataNascimento(inputDate + '/');
+      } else {
+        // Mantém o valor inalterado se não corresponder a um formato válido
+        setDataNascimento(inputDate);
+      }
+    };
+
   return (
     <div className={styles.container}>
       <h1>Cadastro de Usuário</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
         <input type="text" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} />
-        <input type="text" placeholder="Data de Nascimento" value={dataNascimento} onChange={(e) => setDataNascimento(e.target.value)} />
+        <input type="text" placeholder="Data de Nascimento (dd/MM/yyyy)" value={dataNascimento} onChange={handleDataNascimentoChange} />
         <button type="submit">Cadastrar</button>
       </form>
 
