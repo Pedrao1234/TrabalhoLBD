@@ -26,8 +26,7 @@ public class AuthorService {
         AuthorEntity entity = new AuthorEntity();
         entity.setName(dataRequest.name());
         entity.setBirthDate(dataRequest.birthDate());
-        entity.setCpf(dataRequest.cpf());
-        entity.setSex(SexAuthor.MAN);
+        entity.setSex(dataRequest.sex());
         AuthorEntity savedObj = authorRepository.save(entity);
         return savedObj;
     }
@@ -53,9 +52,6 @@ public class AuthorService {
         }
         if (request.birthDate() != null) {
             obj.setBirthDate(request.birthDate());
-        }
-        if (request.cpf() != null) {
-            obj.setCpf(request.cpf());
         }
         if (request.sex() != null) {
             obj.setSex(request.sex());

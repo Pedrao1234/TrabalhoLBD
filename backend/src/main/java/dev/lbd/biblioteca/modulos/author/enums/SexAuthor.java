@@ -1,8 +1,8 @@
 package dev.lbd.biblioteca.modulos.author.enums;
 
 public enum SexAuthor {
-    MAN("Homem"),
-    WOMAN("Mulher");
+    MALE("Masculino"),
+    FEMALE("Feminino");
 
     private final String label;
 

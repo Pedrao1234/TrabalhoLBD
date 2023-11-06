@@ -22,10 +22,6 @@ public class AuthorPredicates {
             DateTimePath<LocalDateTime> filterPath = qEntity.birthDate;
             predicate = predicate.and(filterPath.eq(filters.birthDate()));
         }
-        if (filters.cpf() != null) {
-            StringPath filterPath = qEntity.cpf;
-            predicate = predicate.and(filterPath.eq(filters.cpf()));
-        }
         if (filters.sex() != null) {
             EnumPath<SexAuthor> filterPath = qEntity.sex;
             predicate = predicate.and(filterPath.eq(filters.sex()));

@@ -7,7 +7,6 @@ import dev.lbd.biblioteca.modulos.author.enums.SexAuthor;
 public record AuthorCreateDto(
         String name,
         LocalDateTime birthDate,
-        String cpf,
         SexAuthor sex
 ) {
 }

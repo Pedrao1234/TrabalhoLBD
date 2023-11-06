@@ -10,7 +10,6 @@ public record AuthorResponseDto (
         UUID id,
         String name,
         LocalDateTime birthDate,
-        String cpf,
         SexAuthor sex,
         LocalDateTime createdAt,
         LocalDateTime lastModifiedAt,

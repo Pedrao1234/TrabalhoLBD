@@ -34,7 +34,6 @@ public class AuthorController {
                 entity.getId(),
                 entity.getName(),
                 entity.getBirthDate(),
-                entity.getCpf(),
                 entity.getSex(),
                 entity.getCreatedDate(),
                 entity.getLastModifiedDate(),

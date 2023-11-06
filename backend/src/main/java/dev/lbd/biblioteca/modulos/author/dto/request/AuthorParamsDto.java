@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 public record AuthorParamsDto(
         String name,
         LocalDateTime birthDate,
-        String cpf,
         SexAuthor sex
 
 ) {
