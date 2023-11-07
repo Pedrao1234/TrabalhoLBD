@@ -21,10 +21,16 @@ function CadastroUsuario() {
       setShowErrorModal(true); // Mostra o modal de erro
       return;
     }
-
+    let formattedDataNascimento = ""
     // Formata a data de nascimento
-  const formattedDataNascimento = format(new Date(dataNascimento), 'dd/MM/yyyy');
-
+    try {   
+      formattedDataNascimento = format(new Date(dataNascimento), 'dd/MM/yyyy');
+    } catch (error) {
+      console.error('Erro ao enviar POST request:', error);
+      setErrorMessage('Formato de data de nascimento inválido. Use o formato "dd/MM/yyyy".');
+      setShowErrorModal(true); // Mostra o modal de erro
+      return;
+    }
   // Verifica se a dataNascimento é uma string em um formato válido, por exemplo, "dd/MM/yyyy"
   const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
   if (!dateRegex.test(dataNascimento)) {
