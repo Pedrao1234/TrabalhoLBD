@@ -40,7 +40,7 @@ public class AuthorEntity {
     @NotNull
     UUID id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "birth_date")

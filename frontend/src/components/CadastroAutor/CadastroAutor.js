@@ -7,13 +7,14 @@ import { useNavigate } from 'react-router-dom';
 function CadastroAutor() {
   const [nome, setNome] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
-  const [sexo, setSexo] = useState('');
+  const [sexo, setSexo] = useState('MALE');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
     const [dia, mes, ano] = dataNascimento.split("/");
  
@@ -21,7 +22,7 @@ function CadastroAutor() {
 
    
     const dataCompleta = `${dataFormatada}T00:00:00`;
-
+    console.log(nome, dataCompleta, sexo)
     try {
       const response = await axios.post('http://localhost:3001/v1/author', {
         "name": nome,
