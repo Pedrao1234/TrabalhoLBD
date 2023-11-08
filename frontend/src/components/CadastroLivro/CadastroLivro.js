@@ -30,6 +30,7 @@ function CadastroLivro() {
         "summary":sumario,
       });
 
+
       if (response.status === 201) {
         setShowSuccessModal(true);
       }
@@ -39,6 +40,10 @@ function CadastroLivro() {
       setShowErrorModal(true);
     }
   };
+
+
+      //CRIAR TRY CATCH DO BOOK AUTHOR
+      // pegar response.id pra pegar o id do livro
 
   const handleSuccessModalOkClick = () => {
     setShowSuccessModal(false);
