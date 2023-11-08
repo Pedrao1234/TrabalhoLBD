@@ -40,7 +40,7 @@
 
  ### **Gestão(criar, atualizar, buscar e deletar)**
  
- - **Gestão de Leitores**
+- **Gestão de Leitores**
   - Registre os leitores(clientes da biblioteca) para manutenção das outras funcionalidades.
 
 - **Gestão de Livros**
@@ -58,4 +58,4 @@
 - Para execução do sistema o usuário deve subir um container do docker utilizando o comando /docker-compose up, informações sobre a configuração do pgadmin estão no arquivo docker-compose.yml
 - Depois de se conectar com o banco, o usuário deve rodar a aplicação a partir do comando SPRING_PROFILES_ACTIVE=dev ./mvnw spring-boot:run
 - Por fim, o usuário deve abrir o diretório do frontend, instalar as dependências do react através do comando /npm install e rodar a aplicação através do comando /npm start
-- 
+  
