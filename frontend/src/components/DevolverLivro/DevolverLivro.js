@@ -77,6 +77,7 @@ function DevolverLivro() {
           <h2>Informações do Aluguel</h2>
           <p>Nome do Livro: {rentInfo.book[0].title}</p>
           <p>Nome do Autor: {rentInfo.book[0].publisher}</p>
+          <p>Nome do locador: {rentInfo.reader.name}</p>
           <p>Data de locação: {rentInfo.rentDate}</p>
           <p>Data de Devolução: {rentInfo.devolutionDate}</p>
    
