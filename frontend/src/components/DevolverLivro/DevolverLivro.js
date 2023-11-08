@@ -8,6 +8,8 @@ function DevolverLivro() {
   const [cpf, setCPF] = useState('');
   const [rentInfo, setRentInfo] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleCPFFormSubmit = async (e) => {
@@ -15,17 +17,26 @@ function DevolverLivro() {
 
     try {
       const userResponse = await axios.get(`http://localhost:3001/v1/reader?cpf=${cpf}`);
+     
       const userId = userResponse.data.content[0].id;
+   
 
       const rentResponse = await axios.get(`http://localhost:3001/v1/rent?readerId=${userId}`);
       const rentData = rentResponse.data.content[0]; // Assuming the first element in the content array
 
+      if (rentData === undefined) {
+        setErrorMessage("Esse usuário não posssui livros alugados.")
+        setShowErrorModal(true)
+        return
+      }
       // Exibir informações do registro de aluguel e o botão "Confirmar Devolução"
       rentData.rentDate = format(new Date(rentData.rentDate), 'dd-MM-yyyy');
       rentData.devolutionDate = format(new Date(rentData.devolutionDate), 'dd-MM-yyyy');
       setRentInfo(rentData);
 
     } catch (error) {
+        setErrorMessage("Esse usuário não existe.")
+        setShowErrorModal(true)
       console.error('Erro ao buscar informações de aluguel:', error);
     }
   };
@@ -47,6 +58,10 @@ function DevolverLivro() {
   const handleSuccessModalOkClick = () => {
     setShowSuccessModal(false);
     navigate('/');
+  };
+
+  const handleErrorModalOkClick = () => {
+    setShowErrorModal(false);
   };
 
   return (
@@ -77,6 +92,16 @@ function DevolverLivro() {
           </div>
         </div>
       )}
+
+      
+    {showErrorModal && (
+            <div className={styles.modal}>
+              <div className={styles.modalContent}>
+                <p>{errorMessage}</p>
+                <button onClick={handleErrorModalOkClick}>Ok</button>
+              </div>
+            </div>
+          )}
     </div>
   );
 }
