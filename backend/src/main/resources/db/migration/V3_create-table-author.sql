@@ -2,7 +2,7 @@
 create table author (
     version bigint not null,
     id uuid not null,
-    name varchar(255) not null,
+    name varchar(255) unique not null,
     birth_date timestamp,
     sex char(1) not null,
     created_date timestamp,
