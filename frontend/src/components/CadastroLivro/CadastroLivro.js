@@ -3,36 +3,75 @@ import styles from './CadastroLivro.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 function CadastroLivro() {
   const [nome, setNome] = useState('');
   const [dataLancamento, setDataLancamento] = useState('');
-  const [autor, setAutor] = useState('');
+  const [autor, setAutor] = useState({ name: '', id: '' }); // Store both name and ID
   const [sumario, setSumario] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [authorOptions, setAuthorOptions] = useState([]); // Initialize as an empty array
   const navigate = useNavigate();
+
+  // Function to fetch author options from the backend
+  const fetchAuthorOptions = async (authorName) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/v1/author?name=${authorName}`);
+      setAuthorOptions(response.data.content); // Update the state with the fetched author options
+    } catch (error) {
+      console.error('Error fetching author options:', error);
+      setAuthorOptions([]); // Clear the author options in case of an error
+    }
+  };
+
+  // useEffect to watch for changes in the "autor" input field and fetch author options
+  useEffect(() => {
+    if (autor.name) {
+      fetchAuthorOptions(autor.name);
+    } else {
+      setAuthorOptions([]); // Clear the author options when there's no input
+    }
+  }, [autor.name]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const [dia, mes, ano] = dataLancamento.split("/");
- 
+    const [dia, mes, ano] = dataLancamento.split('/');
     const dataFormatada = `${ano}-${mes}-${dia}`;
-
-   
     const dataCompleta = `${dataFormatada}T00:00:00`;
+
     try {
-      const response = await axios.post('http://localhost:3001/v1/book', {
-        "title":nome,
-        "releaseDate":dataCompleta,
-        "publisher":autor,
-        "summary":sumario,
-      });
+      // Check if both name and id are available in the selected author
+      if (autor.name && autor.id) {
+        const response = await axios.post('http://localhost:3001/v1/book', {
+          title: nome,
+          releaseDate: dataCompleta,
+          publisher: autor.name, // Send the author's name
+          summary: sumario,
+        });
 
-
-      if (response.status === 201) {
-        setShowSuccessModal(true);
+        if (response.status === 201) {
+          const bookId = response.data.id;
+          try {
+            const bookAuthorResponse = await axios.post('http://localhost:3001/v1/bookAuthor', {
+              bookId: bookId, 
+              authorId: autor.id, 
+            });
+        
+            // Handle the response as needed
+            if (bookAuthorResponse.status === 201) {
+              setShowSuccessModal(true);
+            } else {
+              console.error('Erro no POST request para v1/bookAuthor:', bookAuthorResponse);
+            }
+          } catch (error) {
+            console.error('Erro ao enviar POST request para v1/bookAuthor:', error);
+          }
+          
+        }
+      } else {
+        setErrorMessage('Selecione um autor válido.'); // Display an error message
+        setShowErrorModal(true);
       }
     } catch (error) {
       console.error('Erro ao enviar POST request:', error);
@@ -40,10 +79,6 @@ function CadastroLivro() {
       setShowErrorModal(true);
     }
   };
-
-
-      //CRIAR TRY CATCH DO BOOK AUTHOR
-      // pegar response.id pra pegar o id do livro
 
   const handleSuccessModalOkClick = () => {
     setShowSuccessModal(false);
@@ -54,7 +89,6 @@ function CadastroLivro() {
     setShowErrorModal(false);
   };
 
-  // Função para formatar a data enquanto o usuário digita
   const handleDataLancamentoChange = (e) => {
     const inputDate = e.target.value;
     if (/^\d{2}$/.test(inputDate)) {
@@ -66,27 +100,16 @@ function CadastroLivro() {
     }
   };
 
-  const [autoresSugeridos, setAutoresSugeridos] = useState([]);
-
-  useEffect(() => {
-    // Busque a lista de autores do seu sistema a partir de uma API ou outra fonte de dados em tempo real
-    async function fetchAutores() {
-      try {
-        const response = await axios.get('/seu-endpoint-de-autores');
-        const autoresDoSistema = response.data;
-        setAutoresSugeridos(autoresDoSistema);
-      } catch (error) {
-        console.error('Erro ao buscar a lista de autores:', error);
-      }
-    }
-
-    fetchAutores();
-  }, []);
-
   const handleAutorChange = (e) => {
     const inputAutor = e.target.value;
-    setAutor(inputAutor);
-  }
+    setAutor({ name: inputAutor, id: '' }); // Clear the author ID when the input changes
+  };
+
+  const handleAuthorOptionClick = (selectedAuthor) => {
+    // Update the selected author with both name and ID
+    setAutor({ name: selectedAuthor.name, id: selectedAuthor.id });
+    setAuthorOptions([]); // Clear the author options list
+  };
 
   return (
     <div className={styles.container}>
@@ -94,14 +117,17 @@ function CadastroLivro() {
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
         <input type="text" placeholder="Data de Lançamento (dd/MM/yyyy)" value={dataLancamento} onChange={handleDataLancamentoChange} />
-        <input type="text" placeholder="Autor" value={autor} onChange={handleAutorChange} />
-        <ul>
-        {autoresSugeridos.map((sugestao, index) => (
-          <li key={index} onClick={() => setAutor(sugestao)}>
-            {sugestao}
-          </li>
-        ))}
-      </ul>
+        <input type="text" placeholder="Autor" value={autor.name} onChange={handleAutorChange} />
+
+        <div className={styles.authorOptions}>
+          {Array.isArray(authorOptions) &&
+            authorOptions.map((authorOption) => (
+              <div key={authorOption.id} onClick={() => handleAuthorOptionClick(authorOption)}>
+                {authorOption.id} {authorOption.name}
+              </div>
+            ))}
+        </div>
+
         <textarea placeholder="Sumário" value={sumario} onChange={(e) => setSumario(e.target.value)} />
         <button type="submit">Cadastrar</button>
       </form>

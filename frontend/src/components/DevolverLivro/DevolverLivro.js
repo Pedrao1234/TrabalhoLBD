@@ -47,7 +47,7 @@ function DevolverLivro() {
 
       // Formata a data de devolução após a validação
       const formattedDataDevolucao = format(new Date(dataDevolucao), 'dd/MM/yyyy');
-
+      // FAZER O GET PRA ACHAR USUARIO , FAZER GET PRA ACHAR O RENT http://localhost:3001/v1/rent?readerId=id, FAZER O UPDATE DO RENT PRA FINISHED v1/rent/id, DELETAR
       const response = await axios.post('/seu-endpoint-de-post', {
         usuario,
         livro,
