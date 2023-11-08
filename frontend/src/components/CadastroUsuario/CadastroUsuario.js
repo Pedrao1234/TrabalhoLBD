@@ -21,6 +21,14 @@ function CadastroUsuario() {
       setShowErrorModal(true); // Mostra o modal de erro
       return;
     }
+      // Verifica se a dataNascimento é uma string em um formato válido, por exemplo, "dd/MM/yyyy"
+    const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+    if (!dateRegex.test(dataNascimento)) {
+      setErrorMessage('Formato de data de nascimento inválido. Use o formato "dd/MM/yyyy".');
+      setShowErrorModal(true);
+      return;
+    }
+
     let formattedDataNascimento = ""
     // Formata a data de nascimento
     try {   
@@ -31,23 +39,23 @@ function CadastroUsuario() {
       setShowErrorModal(true); // Mostra o modal de erro
       return;
     }
-  // Verifica se a dataNascimento é uma string em um formato válido, por exemplo, "dd/MM/yyyy"
-  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-  if (!dateRegex.test(dataNascimento)) {
-    setErrorMessage('Formato de data de nascimento inválido. Use o formato "dd/MM/yyyy".');
-    setShowErrorModal(true);
-    return;
-  }
 
 
+    const [dia, mes, ano] = formattedDataNascimento.split("/");
+  
+    const dataFormatada = `${ano}-${mes}-${dia}`;
+
+  
+    const dataCompleta = `${dataFormatada}T00:00:00`;
+    console.log(nome,dataCompleta,cpf)
     try {
-      const response = await axios.post('/seu-endpoint-de-post', {
-        nome,
-        cpf,
-        dataNascimento: formattedDataNascimento,
+      const response = await axios.post('http://localhost:3001/v1/reader', {
+        "name": nome,
+        "dateBirth": dataCompleta,
+        "cpf":cpf
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setShowSuccessModal(true); // Mostra o modal de sucesso
       }
     } catch (error) {

@@ -16,16 +16,21 @@ function CadastroLivro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const [dia, mes, ano] = dataLancamento.split("/");
+ 
+    const dataFormatada = `${ano}-${mes}-${dia}`;
 
+   
+    const dataCompleta = `${dataFormatada}T00:00:00`;
     try {
-      const response = await axios.post('/seu-endpoint-de-post', {
-        nome,
-        dataLancamento,
-        autor,
-        sumario,
+      const response = await axios.post('http://localhost:3001/v1/book', {
+        "title":nome,
+        "releaseDate":dataCompleta,
+        "publisher":autor,
+        "summary":sumario,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setShowSuccessModal(true);
       }
     } catch (error) {

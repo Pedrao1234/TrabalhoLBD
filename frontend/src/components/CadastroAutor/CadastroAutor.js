@@ -3,9 +3,9 @@ import styles from './CadastroAutor.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 function CadastroAutor() {
   const [nome, setNome] = useState('');
-  const [cpf, setCpf] = useState('');
   const [dataNascimento, setDataNascimento] = useState('');
   const [sexo, setSexo] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -15,22 +15,21 @@ function CadastroAutor() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const [dia, mes, ano] = dataNascimento.split("/");
+ 
+    const dataFormatada = `${ano}-${mes}-${dia}`;
 
-    if (cpf.length !== 11) {
-      setErrorMessage('O CPF deve conter exatamente 11 caracteres.');
-      setShowErrorModal(true); // Mostra o modal de erro
-      return;
-    }
+   
+    const dataCompleta = `${dataFormatada}T00:00:00`;
 
     try {
-      const response = await axios.post('/seu-endpoint-de-post', {
-        nome,
-        cpf,
-        dataNascimento,
-        sexo,
+      const response = await axios.post('http://localhost:3001/v1/author', {
+        "name": nome,
+        "birthDate": dataCompleta,
+        "sex": sexo
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setShowSuccessModal(true);
       }
     } catch (error) {
@@ -66,9 +65,12 @@ function CadastroAutor() {
       <h1>Cadastro de Autor</h1>
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
-        <input type="text" placeholder="CPF" value={cpf} onChange={(e) => setCpf(e.target.value)} />
         <input type="text" placeholder="Data de Nascimento (dd/MM/yyyy)" value={dataNascimento} onChange={handleDataNascimentoChange} />
-        <input type="text" placeholder="Sexo" value={sexo} onChange={(e) => setSexo(e.target.value)} />
+        <select value={sexo} onChange={(e) => setSexo(e.target.value)}>
+          <option value="MALE">MALE</option>
+          <option value="FEMALE">FEMALE</option>
+        </select>
+
         <button type="submit">Cadastrar</button>
       </form>
 

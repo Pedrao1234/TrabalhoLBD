@@ -16,16 +16,26 @@ function AluguelLivro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const [diaAluguel, mesAluguel, anoAluguel] =dataAluguel.split("/");
+ 
+    const dataFormatadaAluguel = `${anoAluguel}-${mesAluguel}-${diaAluguel}`;
 
+    const dataCompletaAluguel = `${dataFormatadaAluguel}T00:00:00`;
+
+    const [diaDevolucao, mesDevolucao, anoDevolucao] = dataDevolucao.split("/");
+ 
+    const dataFormatadaDevolucao = `${anoDevolucao}-${mesDevolucao}-${diaDevolucao}`;
+
+    const dataCompletaDevolucao = `${dataFormatadaDevolucao}T00:00:00`;
     try {
-      const response = await axios.post('/seu-endpoint-de-post', {
-        usuario,
-        livro,
-        dataAluguel,
-        dataDevolucao,
+      const response = await axios.post('http://localhost:3001/v1/rent', {
+        "readerId":usuario,
+        "bookId":livro,
+        "rentDate": dataCompletaAluguel,
+        "devolutionDate":dataCompletaDevolucao,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setShowSuccessModal(true);
       }
     } catch (error) {
@@ -72,7 +82,7 @@ function AluguelLivro() {
     // Busque a lista de livros do seu sistema a partir de uma API ou outra fonte de dados em tempo real
     async function fetchLivros() {
       try {
-        const response = await axios.get('/seu-endpoint-de-livros');
+        const response = await axios.get('http://localhost:3001/v1/rent');
         const livrosDoSistema = response.data;
         setLivrosSugeridos(livrosDoSistema);
       } catch (error) {
