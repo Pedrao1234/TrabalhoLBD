@@ -4,8 +4,10 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function AluguelLivro() {
-  const [usuario, setUsuario] = useState('');
-  const [livro, setLivro] = useState('');
+  const [cpf, setCPF] = useState('');
+  const [bookName, setBookName] = useState('');
+  const [userId, setUserId] = useState('');
+  const [bookId, setBookId] = useState('');
   const [dataAluguel, setDataAluguel] = useState('');
   const [dataDevolucao, setDataDevolucao] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -13,26 +15,39 @@ function AluguelLivro() {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [livrosSugeridos, setLivrosSugeridos] = useState([]);
+  const [submitEnabled, setSubmitEnabled] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const [diaAluguel, mesAluguel, anoAluguel] =dataAluguel.split("/");
- 
-    const dataFormatadaAluguel = `${anoAluguel}-${mesAluguel}-${diaAluguel}`;
+    // Check if an author has been selected
+    if (!bookId || submitEnabled===false) {
+      setShowErrorModal(true);
+      setErrorMessage('Selecione um autor válido antes de enviar o formulário.');
+      return;
+    }
 
+    const [diaAluguel, mesAluguel, anoAluguel] = dataAluguel.split("/");
+    const dataFormatadaAluguel = `${anoAluguel}-${mesAluguel}-${diaAluguel}`;
     const dataCompletaAluguel = `${dataFormatadaAluguel}T00:00:00`;
 
     const [diaDevolucao, mesDevolucao, anoDevolucao] = dataDevolucao.split("/");
- 
     const dataFormatadaDevolucao = `${anoDevolucao}-${mesDevolucao}-${diaDevolucao}`;
-
     const dataCompletaDevolucao = `${dataFormatadaDevolucao}T00:00:00`;
+
+    try {
+      const readerResponse = await axios.get(`http://localhost:3001/v1/reader?cpf=${cpf}`);
+      setUserId(readerResponse.data.content[0].id); // Update the state with the fetched author options
+    } catch (error) {
+      console.error('Error fetching readers options:', error);
+      setUserId(""); // Clear the author options in case of an error
+    }
+    console.log(userId,bookId,dataCompletaAluguel,dataCompletaDevolucao)
     try {
       const response = await axios.post('http://localhost:3001/v1/rent', {
-        "readerId":usuario,
-        "bookId":livro,
+        "readerId": userId,
+        "bookId": [bookId],
         "rentDate": dataCompletaAluguel,
-        "devolutionDate":dataCompletaDevolucao,
+        "devolutionDate": dataCompletaDevolucao,
       });
 
       if (response.status === 201) {
@@ -45,16 +60,6 @@ function AluguelLivro() {
     }
   };
 
-  const handleSuccessModalOkClick = () => {
-    setShowSuccessModal(false);
-    navigate('/');
-  };
-
-  const handleErrorModalOkClick = () => {
-    setShowErrorModal(false);
-  };
-
-  // Função para formatar a data enquanto o usuário digita
   const handleDataAluguelChange = (e) => {
     const inputDate = e.target.value;
     if (/^\d{2}$/.test(inputDate)) {
@@ -66,7 +71,6 @@ function AluguelLivro() {
     }
   };
 
-  // Função para formatar a data de devolução enquanto o usuário digita
   const handleDataDevolucaoChange = (e) => {
     const inputDate = e.target.value;
     if (/^\d{2}$/.test(inputDate)) {
@@ -78,39 +82,61 @@ function AluguelLivro() {
     }
   };
 
+  const handleSuccessModalOkClick = () => {
+    setShowSuccessModal(false);
+    navigate('/');
+  };
+
+  const handleErrorModalOkClick = () => {
+    setShowErrorModal(false);
+  };
+
+  const handleBookNameChange = (e) => {
+    const inputBookName = e.target.value;
+    setBookName(inputBookName);
+    setSubmitEnabled(false); // Disable the submit button when typing
+  };
+
+  const handleBookSuggestionClick = (livroSugerido) => {
+    setBookName(livroSugerido.title);
+    setBookId(livroSugerido.id);
+    setLivrosSugeridos([]); // Clear book suggestions
+    setSubmitEnabled(true); // Enable the submit button when an author is selected
+  };
+
   useEffect(() => {
-    // Busque a lista de livros do seu sistema a partir de uma API ou outra fonte de dados em tempo real
-    async function fetchLivros() {
-      try {
-        const response = await axios.get('http://localhost:3001/v1/rent');
-        const livrosDoSistema = response.data;
-        setLivrosSugeridos(livrosDoSistema);
-      } catch (error) {
-        console.error('Erro ao buscar a lista de livros:', error);
-      }
+    if (bookName) {
+      fetchBookSuggestions(bookName);
+    } else {
+      setLivrosSugeridos([]);
     }
+  }, [bookName]);
 
-    fetchLivros();
-  }, []);
-
-  const handleLivrosChange = (e) => {
-    const inputLivro = e.target.value;
-    setLivro(inputLivro);
-  }
+  const fetchBookSuggestions = async (bookName) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/v1/book?title=${bookName}`);
+      setLivrosSugeridos(response.data.content);
+    } catch (error) {
+      console.error('Error fetching book suggestions:', error);
+      setLivrosSugeridos([]);
+    }
+  };
 
   return (
     <div className={styles.container}>
       <h1>Aluguel de Livro</h1>
       <form onSubmit={handleSubmit}>
-        <input type="text" placeholder="Nome do Usuário" value={usuario} onChange={(e) => setUsuario(e.target.value)} />
-        <input type="text" placeholder="Nome do Livro" value={livro} onChange={handleLivrosChange} />
-        <ul>
-        {livrosSugeridos.map((sugestao, index) => (
-          <li key={index} onClick={() => setLivro(sugestao)}>
-            {sugestao}
-          </li>
-        ))}
-      </ul>
+        <input type="text" placeholder="CPF" value={cpf} onChange={(e) => setCPF(e.target.value)} />
+        <input type="text" placeholder="Nome do Livro" value={bookName} onChange={handleBookNameChange} />
+        <div className={styles.bookSuggestions}>
+          {Array.isArray(livrosSugeridos) &&
+            livrosSugeridos.map((livroSugerido) => (
+              <div key={livroSugerido.id} onClick={() => handleBookSuggestionClick(livroSugerido)}>
+                {livroSugerido.title} - {livroSugerido.publisher}
+              </div>
+            ))}
+        </div>
+
         <input type="text" placeholder="Data de Aluguel (dd/MM/yyyy)" value={dataAluguel} onChange={handleDataAluguelChange} />
         <input type="text" placeholder="Data de Devolução (dd/MM/yyyy)" value={dataDevolucao} onChange={handleDataDevolucaoChange} />
         <button type="submit">Alugar</button>

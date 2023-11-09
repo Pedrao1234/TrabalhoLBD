@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './CadastroUsuario.module.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+
 
 function CadastroUsuario() {
   const [nome, setNome] = useState('');
@@ -29,19 +29,7 @@ function CadastroUsuario() {
       return;
     }
 
-    let formattedDataNascimento = ""
-    // Formata a data de nascimento
-    try {   
-      formattedDataNascimento = format(new Date(dataNascimento), 'dd/MM/yyyy');
-    } catch (error) {
-      console.error('Erro ao enviar POST request:', error);
-      setErrorMessage('Formato de data de nascimento inválido. Use o formato "dd/MM/yyyy".');
-      setShowErrorModal(true); // Mostra o modal de erro
-      return;
-    }
-
-
-    const [dia, mes, ano] = formattedDataNascimento.split("/");
+    const [dia, mes, ano] = dataNascimento.split("/");
   
     const dataFormatada = `${ano}-${mes}-${dia}`;
 
