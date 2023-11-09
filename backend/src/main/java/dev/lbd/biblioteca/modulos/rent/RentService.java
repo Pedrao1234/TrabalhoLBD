@@ -54,6 +54,9 @@ public class RentService {
         if (reader == null){
             throw new ObjectNotFoundException("Reader not found");
         }
+        if (reader.getRent() != null){
+            throw new RuntimeException("Reader has an open Rent process");
+        }
         entity.setReader(reader);
         entity.setRentDate(dataRequest.rentDate());
         entity.setDevolutionDate(dataRequest.devolutionDate());
