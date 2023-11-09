@@ -123,7 +123,7 @@ function CadastroLivro() {
           {Array.isArray(authorOptions) &&
             authorOptions.map((authorOption) => (
               <div key={authorOption.id} onClick={() => handleAuthorOptionClick(authorOption)}>
-                {authorOption.id} {authorOption.name}
+                {authorOption.name}
               </div>
             ))}
         </div>

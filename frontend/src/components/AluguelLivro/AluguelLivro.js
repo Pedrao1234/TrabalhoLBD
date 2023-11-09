@@ -37,11 +37,43 @@ function AluguelLivro() {
     try {
       const readerResponse = await axios.get(`http://localhost:3001/v1/reader?cpf=${cpf}`);
       setUserId(readerResponse.data.content[0].id); // Update the state with the fetched author options
+
+    try {
+      const response = await axios.get(`http://localhost:3001/v1/rent?readerId=${readerResponse.data.content[0].id}`);
+      if (response.data.content=== "") {
+      setErrorMessage('Esse usuário já tem um alugel em andamento.');
+      setShowErrorModal(true); 
+      return
+      }
+    } catch (error) {
+      console.error('Erro ao enviar POST request:', error);
+      setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
+      setShowErrorModal(true); 
+    }
+
+      // PROCURAR O LIVRO NA TABELA RENT
+       try {
+        const bookResponse = await axios.get(`http://localhost:3001/v1/book/${bookId}`);
+        if (bookResponse.data.status !== "AVAILABLE"){
+          setErrorMessage('Esse livro ja está alugado. Por favor, tente novamente.');
+          setShowErrorModal(true);
+          return;
+        }
+      } catch (error) {
+        console.error('Erro ao enviar POST request:', error);
+        setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
+        setShowErrorModal(true);
+      }
+
+    
     } catch (error) {
       console.error('Error fetching readers options:', error);
       setUserId(""); // Clear the author options in case of an error
+      setErrorMessage('Esse usuário não existe. Por favor, tente novamente.');
+      setShowErrorModal(true);
     }
-    console.log(userId,bookId,dataCompletaAluguel,dataCompletaDevolucao)
+
+
     try {
       const response = await axios.post('http://localhost:3001/v1/rent', {
         "readerId": userId,
