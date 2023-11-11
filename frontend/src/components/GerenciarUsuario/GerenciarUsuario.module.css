@@ -1,0 +1,74 @@
+/* CadastroUsuario.css */
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+input,
+button {
+  margin: 10px 0;
+  padding: 10px;
+}
+
+label {
+  margin-bottom: 5px; /* Adiciona um espaçamento entre labels e inputs */
+}
+
+input {
+  margin-bottom: 10px; /* Adiciona um espaçamento entre inputs */
+  padding: 10px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s;
+  width: 100%; /* Faz com que o input ocupe 100% da largura disponível */
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 10px; /* Adiciona uma margem inferior entre os botões */
+}
+.botao{
+  margin-right: 120px;
+}
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Adicione essas regras ao seu arquivo de estilos (por exemplo, AluguelLivro.module.css) */
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Garante que o modal esteja acima de outros elementos */
+}
+
+.modalContent {
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra */
+  text-align: center;
+}
+
+p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .modal .modalContent {
+    width: 90%;
+  }
+}

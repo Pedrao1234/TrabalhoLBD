@@ -13,6 +13,9 @@ function HomePage() {
           <Link to="/cadastro-usuario">Cadastro de Usuário</Link>
         </li>
         <li>
+          <Link to="/gerenciar-usuario">Gerenciar Usuário</Link>
+        </li>
+        <li>
           <Link to="/cadastro-autor">Cadastro de Autor</Link>
         </li>
         <li>
