@@ -6,33 +6,34 @@ import { useNavigate } from 'react-router-dom';
 function CadastroLivro() {
   const [nome, setNome] = useState('');
   const [dataLancamento, setDataLancamento] = useState('');
-  const [autor, setAutor] = useState({ name: '', id: '' }); // Store both name and ID
+  const [autores, setAutores] = useState([]); // Store an array of authors
   const [sumario, setSumario] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [authorOptions, setAuthorOptions] = useState([]); // Initialize as an empty array
+  const [authorOptions, setAuthorOptions] = useState([]);
+  const [autorInput, setAutorInput] = useState(''); // New state to manage the author input
   const navigate = useNavigate();
 
   // Function to fetch author options from the backend
   const fetchAuthorOptions = async (authorName) => {
     try {
       const response = await axios.get(`http://localhost:3001/v1/author?name=${authorName}`);
-      setAuthorOptions(response.data.content); // Update the state with the fetched author options
+      setAuthorOptions(response.data.content);
     } catch (error) {
       console.error('Error fetching author options:', error);
-      setAuthorOptions([]); // Clear the author options in case of an error
+      setAuthorOptions([]);
     }
   };
 
   // useEffect to watch for changes in the "autor" input field and fetch author options
   useEffect(() => {
-    if (autor.name) {
-      fetchAuthorOptions(autor.name);
+    if (autorInput) {
+      fetchAuthorOptions(autorInput);
     } else {
-      setAuthorOptions([]); // Clear the author options when there's no input
+      setAuthorOptions([]);
     }
-  }, [autor.name]);
+  }, [autorInput]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,36 +42,41 @@ function CadastroLivro() {
     const dataCompleta = `${dataFormatada}T00:00:00`;
 
     try {
-      // Check if both name and id are available in the selected author
-      if (autor.name && autor.id) {
+      if (autores.length > 0) {
+        const authorNames = autores.map((autor) => autor.name);
+        console.log(nome, dataCompleta,String(authorNames),sumario)
         const response = await axios.post('http://localhost:3001/v1/book', {
           title: nome,
           releaseDate: dataCompleta,
-          publisher: autor.name, // Send the author's name
+          publisher: String(authorNames), 
           summary: sumario,
         });
-
+        console.log(response)
         if (response.status === 201) {
           const bookId = response.data.id;
-          try {
-            const bookAuthorResponse = await axios.post('http://localhost:3001/v1/bookAuthor', {
-              bookId: bookId, 
-              authorId: autor.id, 
-            });
-        
-            // Handle the response as needed
-            if (bookAuthorResponse.status === 201) {
-              setShowSuccessModal(true);
-            } else {
-              console.error('Erro no POST request para v1/bookAuthor:', bookAuthorResponse);
+
+          // Iterate over the array of authors and send a request for each
+          for (const autor of autores) {
+            try {
+              const bookAuthorResponse = await axios.post('http://localhost:3001/v1/bookAuthor', {
+                bookId: bookId,
+                authorId: autor.id,
+                //authorType: autor.type, // Include the author type
+              });
+
+              // Handle the response as needed
+              if (bookAuthorResponse.status !== 201) {
+                console.error('Erro no POST request para v1/bookAuthor:', bookAuthorResponse);
+              }
+            } catch (error) {
+              console.error('Erro ao enviar POST request para v1/bookAuthor:', error);
             }
-          } catch (error) {
-            console.error('Erro ao enviar POST request para v1/bookAuthor:', error);
           }
-          
+
+          setShowSuccessModal(true);
         }
       } else {
-        setErrorMessage('Selecione um autor válido.'); // Display an error message
+        setErrorMessage('Adicione pelo menos um autor.'); // Display an error message
         setShowErrorModal(true);
       }
     } catch (error) {
@@ -89,27 +95,40 @@ function CadastroLivro() {
     setShowErrorModal(false);
   };
 
+  const handleAuthorOptionClick = (selectedAuthor) => {
+    setAutores([...autores, { name: selectedAuthor.name, id: selectedAuthor.id, type: 'PRIMARY' }]);
+    setAuthorOptions([]); // Clear the author options list
+    setAutorInput(''); // Clear the author input field
+  };
+
+  const handleAuthorTypeChange = (authorId, selectedType) => {
+    setAutores((prevAutores) =>
+      prevAutores.map((autor) =>
+        autor.id === authorId ? { ...autor, type: selectedType } : autor
+      )
+    );
+  };
+
+  const handleRemoveAuthor = (authorId) => {
+    setAutores((prevAutores) => prevAutores.filter((autor) => autor.id !== authorId));
+  };
+
   const handleDataLancamentoChange = (e) => {
     const inputDate = e.target.value;
+    // Check if the inputDate matches the format "dd"
     if (/^\d{2}$/.test(inputDate)) {
       setDataLancamento(inputDate + '/');
     } else if (/^\d{2}\/\d{2}$/.test(inputDate)) {
       setDataLancamento(inputDate + '/');
+    } else if (/^\d{2}\/\d{2}\/\d{4}$/.test(inputDate)) {
+      // If it matches "dd/MM/yyyy", update the state
+      setDataLancamento(inputDate);
     } else {
+      // If it doesn't match any valid format, keep the value unchanged
       setDataLancamento(inputDate);
     }
   };
-
-  const handleAutorChange = (e) => {
-    const inputAutor = e.target.value;
-    setAutor({ name: inputAutor, id: '' }); // Clear the author ID when the input changes
-  };
-
-  const handleAuthorOptionClick = (selectedAuthor) => {
-    // Update the selected author with both name and ID
-    setAutor({ name: selectedAuthor.name, id: selectedAuthor.id });
-    setAuthorOptions([]); // Clear the author options list
-  };
+  
 
   return (
     <div className={styles.container}>
@@ -117,16 +136,38 @@ function CadastroLivro() {
       <form onSubmit={handleSubmit}>
         <input type="text" placeholder="Nome" value={nome} onChange={(e) => setNome(e.target.value)} />
         <input type="text" placeholder="Data de Lançamento (dd/MM/yyyy)" value={dataLancamento} onChange={handleDataLancamentoChange} />
-        <input type="text" placeholder="Autor" value={autor.name} onChange={handleAutorChange} />
+        <input type="text" placeholder="Pesquise o Autor" value={autorInput} onChange={(e) => setAutorInput(e.target.value)} />
 
         <div className={styles.authorOptions}>
           {Array.isArray(authorOptions) &&
             authorOptions.map((authorOption) => (
-              <div key={authorOption.id} onClick={() => handleAuthorOptionClick(authorOption)}>
-                {authorOption.name}
+              <div key={authorOption.id}>
+                <button onClick={() => handleAuthorOptionClick(authorOption)}>
+                  {authorOption.name}
+                </button>
               </div>
             ))}
         </div>
+
+        {autores.length > 0 && (
+          <div>
+            <p>Autores Selecionados:</p>
+            <ul>
+              {autores.map((autor) => (
+                <li key={autor.id}>
+                  {autor.name} -{' '}
+                  <select value={autor.type} onChange={(e) => handleAuthorTypeChange(autor.id, e.target.value)}>
+                    <option value="PRIMARY">PRIMARY</option>
+                    <option value="SECONDARY">SECONDARY</option>
+                  </select>
+                  <button type="button" onClick={() => handleRemoveAuthor(autor.id)}>
+                    Remover
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <textarea placeholder="Sumário" value={sumario} onChange={(e) => setSumario(e.target.value)} />
         <button type="submit">Cadastrar</button>
