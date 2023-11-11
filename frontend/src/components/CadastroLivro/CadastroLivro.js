@@ -61,7 +61,7 @@ function CadastroLivro() {
               const bookAuthorResponse = await axios.post('http://localhost:3001/v1/bookAuthor', {
                 bookId: bookId,
                 authorId: autor.id,
-                //authorType: autor.type, // Include the author type
+                status: autor.type, // Include the author type
               });
 
               // Handle the response as needed
