@@ -1,0 +1,16 @@
+dev\lbd\biblioteca\modulos\reader\dto\request\ReaderCreateDto.class
+dev\lbd\biblioteca\BibliotecaLbdApplication.class
+dev\lbd\biblioteca\config\postgres\PostgresDatabaseInitialization.class
+dev\lbd\biblioteca\modulos\reader\dto\request\ReaderParamsDto.class
+dev\lbd\biblioteca\modulos\reader\dto\request\ReaderUpdateDto.class
+dev\lbd\biblioteca\modulos\reader\repository\ReaderPostgresRepository.class
+dev\lbd\biblioteca\config\web\CorsConfig.class
+dev\lbd\biblioteca\modulos\reader\repository\ReaderRepository.class
+dev\lbd\biblioteca\modulos\reader\dto\response\ReaderResponseDto.class
+dev\lbd\biblioteca\modulos\reader\QReaderEntity.class
+dev\lbd\biblioteca\modulos\reader\ReaderService.class
+dev\lbd\biblioteca\modulos\reader\ReaderController.class
+dev\lbd\biblioteca\modulos\reader\repository\ReaderPredicates.class
+dev\lbd\biblioteca\modulos\reader\ReaderEntity.class
+dev\lbd\biblioteca\exceptions\ObjectNotFoundException.class
+dev\lbd\biblioteca\modulos\reader\ReaderEntity$ReaderEntityBuilder.class
