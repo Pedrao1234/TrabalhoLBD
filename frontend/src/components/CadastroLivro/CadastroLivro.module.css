@@ -29,6 +29,9 @@
     background-color: #0056b3;
   }
   
+  .remover{
+    margin-left: 20px;
+  }
 
   /* Adicione essas regras ao seu arquivo de estilos (por exemplo, AluguelLivro.module.css) */
 

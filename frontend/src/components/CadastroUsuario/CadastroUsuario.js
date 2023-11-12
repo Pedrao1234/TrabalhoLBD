@@ -48,7 +48,7 @@ function CadastroUsuario() {
       }
     } catch (error) {
       console.error('Erro ao enviar POST request:', error);
-      setErrorMessage('Erro ao efetuar o cadastro de usuário. Por favor, tente novamente.');
+      setErrorMessage('Este usuário já existe. Por favor, tente novamente.');
       setShowErrorModal(true); // Mostra o modal de erro
     }
   };

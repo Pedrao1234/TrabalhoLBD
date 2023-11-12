@@ -22,7 +22,7 @@ function AluguelLivro() {
     // Check if an author has been selected
     if (!bookId || submitEnabled===false) {
       setShowErrorModal(true);
-      setErrorMessage('Selecione um autor válido antes de enviar o formulário.');
+      setErrorMessage('Selecione um livro antes de enviar o formulário.');
       return;
     }
 
@@ -65,6 +65,25 @@ function AluguelLivro() {
         setShowErrorModal(true);
       }
 
+
+      try {
+        console.log(readerResponse.data.content[0].id,[bookId], dataCompletaAluguel, dataCompletaDevolucao)
+        const response = await axios.post('http://localhost:3001/v1/rent', {
+          "readerId": readerResponse.data.content[0].id,
+          "bookId": [bookId],
+          "rentDate": dataCompletaAluguel,
+          "devolutionDate": dataCompletaDevolucao,
+        });
+  
+        if (response.status === 201) {
+          setShowSuccessModal(true);
+        }
+      } catch (error) {
+        console.error('Erro ao enviar POST request:', error);
+        setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
+        setShowErrorModal(true);
+      }
+
     
     } catch (error) {
       console.error('Error fetching readers options:', error);
@@ -74,22 +93,7 @@ function AluguelLivro() {
     }
 
 
-    try {
-      const response = await axios.post('http://localhost:3001/v1/rent', {
-        "readerId": userId,
-        "bookId": [bookId],
-        "rentDate": dataCompletaAluguel,
-        "devolutionDate": dataCompletaDevolucao,
-      });
 
-      if (response.status === 201) {
-        setShowSuccessModal(true);
-      }
-    } catch (error) {
-      console.error('Erro ao enviar POST request:', error);
-      setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
-      setShowErrorModal(true);
-    }
   };
 
   const handleDataAluguelChange = (e) => {

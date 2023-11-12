@@ -41,7 +41,6 @@ public class BookAuthorService {
         }
         entity.setBook(book);
         entity.setAuthor(author);
-        entity.setStatus(dataRequest.status());
         BookAuthorEntity savedObj = bookAuthorRepository.save(entity);
         return savedObj;
     }
@@ -70,9 +69,6 @@ public class BookAuthorService {
         AuthorEntity author = authorRepository.findById(request.authorId());
         if (author != null){
             obj.setAuthor(author);
-        }
-        if (request.status() != null){
-            obj.setStatus(request.status());
         }
 
         BookAuthorEntity updatedObj = bookAuthorRepository.update(obj);
