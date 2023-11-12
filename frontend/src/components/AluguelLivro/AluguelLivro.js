@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 function AluguelLivro() {
   const [cpf, setCPF] = useState('');
   const [bookName, setBookName] = useState('');
-  const [userId, setUserId] = useState('');
   const [bookId, setBookId] = useState('');
   const [dataAluguel, setDataAluguel] = useState('');
   const [dataDevolucao, setDataDevolucao] = useState('');
@@ -36,7 +35,6 @@ function AluguelLivro() {
 
     try {
       const readerResponse = await axios.get(`http://localhost:3001/v1/reader?cpf=${cpf}`);
-      setUserId(readerResponse.data.content[0].id); // Update the state with the fetched author options
 
     try {
       const response = await axios.get(`http://localhost:3001/v1/rent?readerId=${readerResponse.data.content[0].id}`);
@@ -87,7 +85,6 @@ function AluguelLivro() {
     
     } catch (error) {
       console.error('Error fetching readers options:', error);
-      setUserId(""); // Clear the author options in case of an error
       setErrorMessage('Esse usuário não existe. Por favor, tente novamente.');
       setShowErrorModal(true);
     }

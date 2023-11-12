@@ -88,7 +88,7 @@ function DevolverLivro() {
       {showSuccessModal && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
-            <p>Devolução feita com sucesso</p>
+            <p>Devolução feita com sucesso!</p>
             <button onClick={handleSuccessModalOkClick}>Ok</button>
           </div>
         </div>
