@@ -80,7 +80,7 @@ function AluguelLivro() {
         }
       } catch (error) {
         console.error('Erro ao enviar POST request:', error);
-        setErrorMessage('Erro ao efetuar o aluguel. Por favor, tente novamente.');
+        setErrorMessage('Esse usuário já tem um alugel em andamento.');
         setShowErrorModal(true);
       }
 
