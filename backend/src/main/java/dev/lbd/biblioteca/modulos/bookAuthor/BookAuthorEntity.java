@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import dev.lbd.biblioteca.modulos.author.AuthorEntity;
 import dev.lbd.biblioteca.modulos.book.BookEntity;
+import dev.lbd.biblioteca.modulos.bookAuthor.enums.StatusAuthor;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -45,6 +46,10 @@ public class BookAuthorEntity {
     @JoinColumn(name = "author_id")
     @JsonManagedReference
     private AuthorEntity author;
+
+    @Column(name = "status_author")
+    @Enumerated
+    private StatusAuthor status;
 
     @CreatedDate
     @Column(name = "created_date")

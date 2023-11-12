@@ -34,6 +34,7 @@ public class BookAuthorController {
                 entity.getId(),
                 entity.getBook(),
                 entity.getAuthor(),
+                entity.getStatus(),
                 entity.getCreatedDate(),
                 entity.getLastModifiedDate(),
                 entity.getDeletedDate()
