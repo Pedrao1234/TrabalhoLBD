@@ -142,9 +142,9 @@ function CadastroLivro() {
           {Array.isArray(authorOptions) &&
             authorOptions.map((authorOption) => (
               <div key={authorOption.id}>
-                <button onClick={() => handleAuthorOptionClick(authorOption)}>
+                <p onClick={() => handleAuthorOptionClick(authorOption)}>
                   {authorOption.name}
-                </button>
+                </p>
               </div>
             ))}
         </div>
@@ -160,7 +160,7 @@ function CadastroLivro() {
                     <option value="PRIMARY">PRIMARY</option>
                     <option value="SECONDARY">SECONDARY</option>
                   </select>
-                  <button type="button" onClick={() => handleRemoveAuthor(autor.id)}>
+                  <button className={styles.remover} type="button" onClick={() => handleRemoveAuthor(autor.id)}>
                     Remover
                   </button>
                 </li>
